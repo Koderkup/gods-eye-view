@@ -217,7 +217,7 @@ export const VANCOUVER_IMAGE_ORIGIN = 'https://trafficcams.vancouver.ca/';
  */
 export const DEFAULT_VANCOUVER_MAX_SOURCES = 600;
 /** Downtown Vancouver anchor (Canada Place / Coal Harbour) for ranking. */
-export const VANCOUVER_CENTER = { lat: 49.2827, lon: -123.1207 };
+export const VANCOUVER_CENTER = { lat: 49.2888, lon: -123.1111 };
 /** Live Traffic NSW (Transport for NSW): keyless public camera catalog. */
 export const NSW_CAMERAS_URL =
   'https://data.livetraffic.com/cameras/traffic-cam.json';
