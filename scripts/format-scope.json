@@ -865,6 +865,6 @@
   "scripts/qa-journey-recorder.mjs",
   "scripts/qa-alpr-journey.mjs",
   "scripts/qa-context-arrivals.mjs",
-  "scripts/build-vancouver-cctc.mjs",
-  "src/data/vancouverCctcPack.test.mjs"
+  "scripts/build-vancouver-cctv.mjs",
+  "src/data/vancouverCctvPack.test.mjs"
 ]

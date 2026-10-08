@@ -548,8 +548,8 @@ export const CITY_POIS = {
       },
       {
         name: 'Vancouver City Hall',
-        lat: 49.2827,
-        lon: -123.1207,
+        lat: 49.26083,
+        lon: -123.11389,
         alt: 500,
         pitch: -22,
         heading: 180,
