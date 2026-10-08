@@ -193,6 +193,18 @@ async function mapPool(fns, limit) {
   await Promise.all(workers);
   return results;
 }
+export function shouldWriteCatalog({
+  failedPages = 0,
+  pagesWithCameras = 0,
+  sourceCount = 0,
+  outExists = false,
+} = {}) {
+  if (!Number.isFinite(sourceCount) || sourceCount === 0) return false;
+  if (!Number.isFinite(pagesWithCameras) || pagesWithCameras === 0)
+    return false;
+  if (outExists && failedPages > 0) return false;
+  return true;
+}
 async function main() {
   console.log('[build-vancouver-cctv] fetching KML + index…');
   const [kml, indexHtml] = await Promise.all([text(KML_URL), text(INDEX_URL)]);
@@ -292,8 +304,23 @@ async function main() {
   const pagesWithCameras = results.filter(
     (r) => !r.error && r.cameras.length,
   ).length;
+  const failedPages = results.filter((r) => r.error).length;
   const totalCameras = results.reduce((sum, r) => sum + r.cameras.length, 0);
   const outPath = path.join(ROOT, 'config', 'cctv_sources.vancouver.json');
+  if (
+    !shouldWriteCatalog({
+      failedPages,
+      pagesWithCameras,
+      sourceCount: unique.length,
+      outExists: fs.existsSync(outPath),
+    })
+  ) {
+    console.warn(
+      `[build-vancouver-cctv] incomplete acquisition (${failedPages} failed, ${pagesWithCameras}/${results.length} pages); preserving existing catalog`,
+    );
+    process.exitCode = 1;
+    return;
+  }
   fs.writeFileSync(outPath, `${JSON.stringify(unique, null, 2)}\n`, 'utf8');
   console.log(
     `[build-vancouver-cctv] ${pagesWithCameras}/${results.length} pages · ${totalCameras} cameras → ${unique.length} sources`,
@@ -308,4 +335,9 @@ function round6(n) {
   return Math.round(n * 1e6) / 1e6;
 }
 
-await main();
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  await main();
+}

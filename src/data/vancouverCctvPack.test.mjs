@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeSourceItem } from '../../server/providers/cctv/normalize.js';
 import { loadVancouverSourcesFromCatalog } from '../../server/providers/cctv/sources.js';
+import { shouldWriteCatalog } from '../../scripts/build-vancouver-cctv.mjs';
 import { allocateSourceCap } from '../../server/providers/cctv/cap.js';
 import {
   DEFAULT_VANCOUVER_MAX_SOURCES,
@@ -241,6 +242,36 @@ test('Vancouver loader fails closed: a missing/unreadable file returns [] withou
     if (saved === undefined) delete process.env.CCTV_VANCOUVER_SOURCES_FILE;
     else process.env.CCTV_VANCOUVER_SOURCES_FILE = saved;
   }
+});
+
+test('incomplete generator acquisition preserves the existing catalog', () => {
+  assert.equal(
+    shouldWriteCatalog({
+      failedPages: 1,
+      pagesWithCameras: 200,
+      sourceCount: 800,
+      outExists: true,
+    }),
+    false,
+  );
+  assert.equal(
+    shouldWriteCatalog({
+      failedPages: 0,
+      pagesWithCameras: 0,
+      sourceCount: 0,
+      outExists: true,
+    }),
+    false,
+  );
+  assert.equal(
+    shouldWriteCatalog({
+      failedPages: 0,
+      pagesWithCameras: 218,
+      sourceCount: 830,
+      outExists: true,
+    }),
+    true,
+  );
 });
 
 test('Vancouver loader skips malformed rows and off-host URLs', (t) => {
