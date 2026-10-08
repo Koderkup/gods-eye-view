@@ -248,6 +248,13 @@ export const DATA_CREDITS = [
       '(Terms of Use)',
   },
   {
+    key: 'vegvesen-cctv',
+    html:
+      'Road cameras (Norway): contains data under the ' +
+      '<a href="https://data.norge.no/nlod/en/2.0" target="_blank" rel="noopener">Norwegian licence for Open Government data (NLOD)</a> ' +
+      'distributed by Statens vegvesen',
+  },
+  {
     key: 'gbfs',
     html: 'Bikeshare availability: GBFS operator feeds (e.g. Austin BCycle)',
   },
