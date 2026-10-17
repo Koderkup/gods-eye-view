@@ -124,7 +124,7 @@ test('Vancouver headings come from the official direction labels', () => {
   }
 });
 
-test('Vancouver loads as a default live pack, trimmed to the DEFAULT_VANCOUVER_MAX_SOURCES cap', (t) => {
+test('Vancouver loads as a live pack, trimmed to the DEFAULT_VANCOUVER_MAX_SOURCES cap', (t) => {
   t.mock.method(console, 'log', () => {});
   t.mock.method(console, 'warn', () => {});
   const saved = process.env.CCTV_VANCOUVER_SOURCES_FILE;
@@ -383,20 +383,21 @@ test('Vancouver shares the global catalog cap with other packs (round-robin, no 
   assert.equal(byName.austin.kept + byName.vancouver.kept, 40);
 });
 
-test('the Vancouver LIVE_PACKS entry is enabled by default, off only via CCTV_VANCOUVER_ENABLED=0', () => {
-  // Vancouver's enabled() gate in server/providers/cctv/catalog.js uses the
-  // same envEnabled() predicate as the eight regional packs (tfl/ontario/
-  // fintraffic/drivebc/txdot/tallinn/tarktee/warendorf/calgary). Lock the
-  // convention so Vancouver can never be silently dropped and can't blank peers.
-  const envEnabled = (name) => String(process.env[name] || '1').trim() !== '0';
+test('the Vancouver LIVE_PACKS entry is opt-in, on only via CCTV_VANCOUVER_ENABLED=1', () => {
+  // Vancouver's image terms are unconfirmed, so its enabled() gate in
+  // server/providers/cctv/catalog.js uses the same envOptIn() predicate as the
+  // other unconfirmed-terms packs (nyc, lithuania): unset never reaches the
+  // upstream. Lock the convention so Vancouver can never be silently flipped
+  // default-on and can't blank peers.
+  const envOptIn = (name) => String(process.env[name] || '').trim() === '1';
   const saved = process.env.CCTV_VANCOUVER_ENABLED;
   try {
     delete process.env.CCTV_VANCOUVER_ENABLED;
-    assert.equal(envEnabled('CCTV_VANCOUVER_ENABLED'), true, 'default-on');
+    assert.equal(envOptIn('CCTV_VANCOUVER_ENABLED'), false, 'default-off');
     process.env.CCTV_VANCOUVER_ENABLED = '0';
-    assert.equal(envEnabled('CCTV_VANCOUVER_ENABLED'), false, "off via '0'");
+    assert.equal(envOptIn('CCTV_VANCOUVER_ENABLED'), false, "off via '0'");
     process.env.CCTV_VANCOUVER_ENABLED = '1';
-    assert.equal(envEnabled('CCTV_VANCOUVER_ENABLED'), true, "on via '1'");
+    assert.equal(envOptIn('CCTV_VANCOUVER_ENABLED'), true, "on via '1'");
   } finally {
     if (saved === undefined) delete process.env.CCTV_VANCOUVER_ENABLED;
     else process.env.CCTV_VANCOUVER_ENABLED = saved;

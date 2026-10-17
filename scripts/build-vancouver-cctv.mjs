@@ -327,7 +327,7 @@ async function main() {
   );
   console.log(`[build-vancouver-cctv] wrote ${path.relative(ROOT, outPath)}`);
   console.log(
-    '[build-vancouver-cctv] Vancouver ships as a default LIVE_PACKS entry (catalog.js); loads alongside Austin/Caltrans/etc with no env var. Disable only Vancouver with: CCTV_VANCOUVER_ENABLED=0',
+    '[build-vancouver-cctv] Vancouver registers as an opt-in LIVE_PACKS entry (catalog.js); image terms are unconfirmed, so it loads only with CCTV_VANCOUVER_ENABLED=1, alongside Austin/Caltrans/etc.',
   );
 }
 

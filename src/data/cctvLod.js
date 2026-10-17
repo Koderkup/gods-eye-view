@@ -42,6 +42,10 @@ const PROVIDER_STATIC_REFRESH_MS = Object.freeze({
   // carry a 300 s meta refresh), so the default 5-min ambient-card cadence
   // is the honest fetch rate; kept explicit to document the decision.
   'city of vancouver traffic cams': 5 * 60 * 1000,
+  // Measured empirically (2026-09-15): polling the same SCT/Terrassa frame
+  // every 20s showed no change inside 64s but a new frame by ~90-150s later —
+  // matches the other highway packs' 3-minute cadence.
+  'servei català de trànsit': 3 * 60 * 1000,
 });
 
 /**
