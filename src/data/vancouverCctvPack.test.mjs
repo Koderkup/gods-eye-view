@@ -69,7 +69,11 @@ test('Vancouver pack is a non-empty canonical source list', () => {
     assert.equal(normalized.city, 'Vancouver', normalized.id);
     assert.equal(normalized.cityId, 'vancouver', normalized.id);
     assert.equal(normalized.feedType, 'image', normalized.id);
-    assert.match(normalized.headingConfidence, /^(high|low)$/, normalized.id);
+    assert.match(
+      normalized.headingConfidence,
+      /^(high|medium|low)$/,
+      normalized.id,
+    );
   }
 });
 
@@ -120,7 +124,10 @@ test('Vancouver headings come from the official direction labels', () => {
     const direction = /-(north|east|south|west)$/.exec(source.id)?.[1];
     assert.ok(direction, source.id);
     assert.equal(source.headingDeg, CARDINALS[direction], source.id);
-    assert.equal(source.headingConfidence, 'high', source.id);
+    // The bearing is the city's own designation, but the pose sits at the
+    // intersection's single shared point, so the pack ships 'medium' — the
+    // honest pose confidence (review note on #620).
+    assert.equal(source.headingConfidence, 'medium', source.id);
   }
 });
 

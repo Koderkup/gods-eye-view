@@ -1346,8 +1346,10 @@ export function loadWarendorfSourcesFromCatalog({
  *
  * Frames are public JPEG stills on trafficcams.vancouver.ca; the catalog
  * carries intersection-level coordinates and N/E/S/W headings derived from the
- * City of Vancouver KML and per-intersection pages. Poses are treated as
- * curated (the generator records headingConfidence='high'); only the official
+ * City of Vancouver KML and per-intersection pages. Poses pass through as
+ * shipped (the generator records headingConfidence='medium' — the bearing is
+ * the city's, but the shared intersection point keeps it below a surveyed
+ * 'high'; poseSource 'curated' still wins in the HUD); only the official
  * trafficcams origin is registered; the proxy fetches only registered URLs.
  *
  * @returns {Array<object>} Camera source objects.

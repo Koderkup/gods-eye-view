@@ -276,9 +276,12 @@ async function main() {
         lat: round6(lat),
         lon: round6(lon),
         headingDeg: cam.headingDeg,
-        headingConfidence: 'high',
-        // Same fabricated-pose priors as Austin's heading-known cameras; the
-        // client's one-shot ground snap + manual calibration own the truth.
+        // The bearing is the city's own N/E/S/W designation, but the pose sits
+        // at the intersection's single shared point (several directions per
+        // point), so the flag reads 'medium' — an honest pose confidence, not
+        // a surveyed one (review note on #620). The client renders medium
+        // without the (ESTIMATED) tag; only 'low' does that.
+        headingConfidence: 'medium',
         pitchDeg: -24,
         fovDeg: 56,
         rangeM: 210,

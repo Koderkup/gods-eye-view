@@ -1669,7 +1669,9 @@ nearest-downtown first). Its catalog file can be repointed via
 exists as an alternate full-catalog input for self-hosters, but Vancouver no
 longer depends on it. Coordinates are intersection-level (the city publishes one
 point per intersection; the cameras facing different directions share it),
-headings come from the city's own N/E/S/W designations with high confidence, and
+headings come from the city's own N/E/S/W designations — the bearing is the
+city's, but the pose sits at the shared intersection point, so each row carries
+`headingConfidence: 'medium'` rather than a surveyed `high` — and
 frame URLs stay pinned to trafficcams.vancouver.ca. The pack
 carries an explicit 5-minute ambient refresh entry — `city of vancouver traffic
 cams` in the CCTV LOD table — because the city's stills regenerate on a 300 s
